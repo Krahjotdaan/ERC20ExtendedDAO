@@ -73,7 +73,7 @@ contract ERC20 is IERC20 {
 
     // issuing permission to <spender> to spend amount of tokens from <msg.sender> address
     function approve(address spender, uint256 amount) public returns (bool) {
-        require(balances[spender] >= amount, "ERC20: not enough tokens");
+        require(balances[msg.sender] >= amount, "ERC20: not enough tokens");
         require(amount > 0, "ERC20: amount must be over 0");
         allowed[msg.sender][spender] = amount;
 
