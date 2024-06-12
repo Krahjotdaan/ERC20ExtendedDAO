@@ -8,6 +8,7 @@ import "./Staking.sol" as Staking;
 /// @title Extended decentralized autonomous organization with mintable ERC20 and official staking contract
 /// @author https://github.com/Krahjotdaan
 /// @dev Open Source under MIT License
+///
 contract DAO {
 
     /// @notice struct of DAO member`s deposit
