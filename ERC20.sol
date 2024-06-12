@@ -125,16 +125,17 @@ contract ERC20 is IERC20 {
     }
 
     // token emission
-    function mint(address to, uint256 amount) external {
+    function mint(address to, uint256 amount) external returns (bool) {
         require(msg.sender == dao || msg.sender == staking, "ERC20: no permission to coinage");
         balances[to] += amount;
         _totalSupply += amount;
         
         emit Transfer(address(0), to, amount);
+        return true;
     }
 
     // token burning
-    function burn(uint256 amount) external {
+    function burn(uint256 amount) external returns(bool) {
         require(balances[msg.sender] >= amount, "ERC20: not enough tokens");
         require(amount > 0, "ERC20: amount must be over 0");
         balances[msg.sender] -= amount;
@@ -142,6 +143,7 @@ contract ERC20 is IERC20 {
         balances[address(0)] += amount;
         
         emit Transfer(msg.sender, address(0), amount);
+        return true;
     }
 
     function setStaking(address _staking) external {
