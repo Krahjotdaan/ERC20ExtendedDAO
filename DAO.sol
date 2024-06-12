@@ -44,11 +44,14 @@ contract DAO {
 
     /// @notice time allotted for proposal
     uint256 time;
+
     /// @notice creator of DAO
     address public chairman;
+
     /// @notice mintable ERC20
     /// @dev can only be binded once
     address public TOD;
+
     /// @notice official DAO staking contract
     /// @dev can only be binded once
     address public staking;
