@@ -65,6 +65,7 @@ contract Staking {
     constructor(address _dao, address _TOD) {
         require(_dao.code.length > 0, "Staking: _dao is not a contract");
         require(_TOD.code.length > 0, "Staking: _TOD is not a contract");
+
         dao = _dao;
         TOD = _TOD;
         creator = msg.sender;
@@ -108,6 +109,7 @@ contract Staking {
         require(IERC20(TOD).mint(msg.sender, reward));
 
         emit Unstake(msg.sender, stakes[msg.sender].tokenValue + reward);
+        
         delete stakes[msg.sender];
     }
 
@@ -121,6 +123,7 @@ contract Staking {
     function setRewardPercent(uint256 percent) external {
         require(msg.sender == dao, "Staking: sender is not dao");
         require(percent > 0, "Staking: new percent must be over 0");
+
         rewardPercent = percent;
     }
 
@@ -134,6 +137,7 @@ contract Staking {
     function setRewardPeriod(uint256 time) external {
         require(msg.sender == dao, "Staking: sender is not dao");
         require(time > 0, "Staking: new time must be over 0");
+
         rewardPeriod = time;
     }
 
