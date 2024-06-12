@@ -12,6 +12,7 @@ import "./Staking.sol" as Staking;
 contract DAO {
 
     /// @notice struct of DAO member`s deposit
+    ///
     /// @param allTokens - tokens that DAO member can use for votings
     /// @param frozenTokens - tokens that DAO member used in current voting
     /// @param unfrozenTime - time when DAO member will be able to use frozenTokens again
@@ -23,9 +24,11 @@ contract DAO {
     }
 
     /// @notice struct of proposal
+    ///
     /// @param pEndTime - proposal end time
     /// @param pTokenYes - amount of tokens that used for voting "for"
     /// @param pTokenNo - amount of tokens that used for voting "against"
+    ///
     /// @param pCallAddress - address of contract where it is called function
     /// @param pStatus - shows whether proposal is completed or not
     /// @param pCallData - encoded signature and arguments of called function
