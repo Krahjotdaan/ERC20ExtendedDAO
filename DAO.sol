@@ -61,7 +61,7 @@ contract DAO {
 
     /// @notice contains confirmation of the fact of voting in all proposals for each DAO member
     mapping(uint256 => mapping(address => bool)) voters;
-    
+
     /// @notice contains structs Deposit for each DAO member
     mapping(address => Deposit) deposits;
 
@@ -70,6 +70,7 @@ contract DAO {
 
     constructor(uint256 _time) {
         require(_time >= 60, "DAO: _time must be over or equals 1 minute"); 
+
         time = _time;
         chairman = msg.sender;
     }
@@ -85,6 +86,7 @@ contract DAO {
         require(TOD != address(0), "DAO: TOD is not defined");
         require(_amount > 0, "DAO: _amount must be over 0");
         require(ERC20.ERC20(TOD).transferFrom(msg.sender, address(this), _amount));
+
         deposits[msg.sender].allTokens += _amount;
     } 
 
@@ -152,8 +154,10 @@ contract DAO {
     function vote(uint256 _pId, uint256 _tokens, bool _choice) external {
         require(_tokens > 0, "DAO: _tokens must be over 0");
         Deposit memory deposit = deposits[msg.sender];
+
         require(_pId < allProposals.length, "DAO: proposal does not exist");
         Proposal memory proposal = allProposals[_pId];
+
         require(_tokens <= deposit.allTokens, "DAO: not enough tokens");
         require(block.timestamp < proposal.pEndTime, "DAO: proposal time is over");
         require(!voters[_pId][msg.sender], "DAO: you have already voted");
@@ -189,6 +193,7 @@ contract DAO {
     function finishProposal(uint256 _pId) external {
         require(_pId < allProposals.length, "DAO: proposal does not exist");
         Proposal memory proposal = allProposals[_pId];
+        
         require(block.timestamp > proposal.pEndTime, "DAO: proposal is still going on");
         require(!proposal.pStatus, "DAO: proposal is already completed");
 
@@ -232,6 +237,7 @@ contract DAO {
     ///
     function getProposalByID(uint256 _pId) external view returns (Proposal memory) {
         require(_pId < allProposals.length, "DAO: proposal does not exist");
+
         return allProposals[_pId];
     }
 
@@ -245,6 +251,7 @@ contract DAO {
         require(msg.sender == chairman, "DAO: you are not a chairman");
         require(TOD == address(0), "DAO: TOD is already setted");
         require(ERC20.ERC20(_TOD).creator() == chairman, "DAO: chairman is not a creator of _TOD");
+
         TOD = _TOD;
     }
 
@@ -258,6 +265,7 @@ contract DAO {
         require(msg.sender == chairman, "DAO: you are not a chairman");
         require(staking == address(0), "DAO: staking is already setted");
         require(Staking.Staking(_staking).creator() == chairman, "DAO: chairman is not a creator of _staking");
+
         staking = _staking;
     }
 }
