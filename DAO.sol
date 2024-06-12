@@ -23,9 +23,8 @@ contract DAO {
 
     uint256 time;
     address public chairman;
-    ERC20.ERC20 TOD;
-    Staking.Staking staking;
-
+    address public TOD;
+    address public staking;
 
     Proposal[] allProposals;
 
@@ -46,10 +45,11 @@ contract DAO {
     /// @dev изменяется значение депозита для пользователя, вызвавшего функцию
     ///
     function addDeposit(uint256 _amount) external {
-        require(address(TOD) != address(0), "DAO: TOD is not defined");
-        require(TOD.transferFrom(msg.sender, address(this), _amount), "DAO: not enough tokens");
+        require(TOD != address(0), "DAO: TOD is not defined");
+        require(_amount > 0, "DAO: _amount must be over 0");
+        require(ERC20.ERC20(TOD).transferFrom(msg.sender, address(this), _amount), "DAO: not enough tokens");
         deposits[msg.sender].allTokens += _amount;
-    }
+    } 
 
     /// @notice функция вывода депозита
     ///
@@ -59,13 +59,16 @@ contract DAO {
     /// @dev нельзя вывести из депозита больше токенов, чем в нём есть
     ///
     function withdrawDeposit(uint256 _amount) external {
+        require(_amount > 0, "DAO: _amount must be over 0");
         Deposit storage deposit = deposits[msg.sender];
+        require(deposit.allTokens - deposit.frozenToken >= _amount, "DAO: not enough tokens");
+
         if (deposit.frozenToken > 0 && deposit.unfrozenTime < block.timestamp) {
             deposit.frozenToken = 0;
             deposit.unfrozenTime = 0;
         }
-        require(deposit.allTokens - deposit.frozenToken >= _amount, "DAO: not enough tokens");
-        require(TOD.transfer((msg.sender), _amount));
+        
+        require(ERC20.ERC20(TOD).transfer((msg.sender), _amount));
         deposit.allTokens -= _amount;
     }
 
@@ -81,7 +84,7 @@ contract DAO {
     /// @dev вызывает событие AddProposal
     ///
     function addProposal(bytes calldata _pCallData, address _pCallAddress) external {
-        require(address(TOD) != address(0), "DAO: TOD is not defined");
+        require(TOD != address(0), "DAO: TOD is not defined");
         require(_pCallAddress != address(0), "DAO: _pCallAddress is address(0)");
         require(_pCallAddress != address(this), "DAO: _pCallAddress is DAO");
         require(_pCallAddress == address(TOD) || _pCallAddress == address(staking), "DAO: _pCallAddress is not address of TOD or staking");
@@ -96,6 +99,7 @@ contract DAO {
                 _pCallData
             )
         );
+
         emit AddProposal(allProposals.length - 1, _pCallData, _pCallAddress);
     }
 
@@ -110,6 +114,7 @@ contract DAO {
     /// @dev вызывает прерывание, если время голосования истекло
     ///
     function vote(uint256 _pId, uint256 _tokens, bool _choice) external {
+        require(_tokens > 0, "DAO: _tokens must be over 0");
         Deposit memory deposit = deposits[msg.sender];
         require(_pId < allProposals.length, "DAO: proposal does not exist");
         Proposal memory proposal = allProposals[_pId];
@@ -154,7 +159,7 @@ contract DAO {
 
         allProposals[_pId].pStatus = true;
 
-        bool quorum = proposal.pTokenYes + proposal.pTokenNo > TOD.totalSupply() / 2;
+        bool quorum = (proposal.pTokenYes + proposal.pTokenNo) > ERC20.ERC20(TOD).totalSupply() / 2 + 1;
         bool result = proposal.pTokenYes > proposal.pTokenNo;
         bool success = false;
 
@@ -203,9 +208,9 @@ contract DAO {
     ///
     function setTOD(address _TOD) public {
         require(msg.sender == chairman, "DAO: you are not a chairman");
-        require(address(TOD) == address(0), "DAO: TOD is already setted");
-        require(ERC20.ERC20(_TOD).creator() == chairman, "DAO: chairman is not a creator of TOD");
-        TOD = ERC20.ERC20(_TOD);
+        require(TOD == address(0), "DAO: TOD is already setted");
+        require(ERC20.ERC20(_TOD).creator() == chairman, "DAO: chairman is not a creator of _TOD");
+        TOD = _TOD;
     }
 
     /// @notice Функция для привязки контракта стейкинга к DAO
@@ -216,8 +221,8 @@ contract DAO {
     ///
     function setStaking(address _staking) public {
         require(msg.sender == chairman, "DAO: you are not a chairman");
-        require(address(staking) == address(0), "DAO: staking is already setted");
-        require(Staking.Staking(staking).creator() == chairman, "DAO: chairman is not a creator of staking");
-        staking = Staking.Staking(_staking);
+        require(staking == address(0), "DAO: staking is already setted");
+        require(Staking.Staking(_staking).creator() == chairman, "DAO: chairman is not a creator of _staking");
+        staking = _staking;
     }
 }
