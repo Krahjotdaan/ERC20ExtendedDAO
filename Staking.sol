@@ -16,7 +16,7 @@ interface IERC20 {
     function approve(address spender, uint256 amount) external returns (bool);
     function transfer(address to, uint256 amount) external returns (bool);
     function transferFrom(address from, address to, uint256 amount) external returns (bool);
-    function mint(address to, uint256 amount) external;
+    function mint(address to, uint256 amount) external returns (bool);
 }
 
 struct StakeStruct {
@@ -65,8 +65,8 @@ contract Staking {
         require(block.timestamp > stakes[msg.sender].unstakeTime, "Staking: it's not yet time to take the steak out");
         
         uint256 reward = calculateReward(msg.sender);
-        IERC20(TOD).transfer(msg.sender, stakes[msg.sender].tokenValue);
-        IERC20(TOD).mint(msg.sender, reward);
+        require(IERC20(TOD).transfer(msg.sender, stakes[msg.sender].tokenValue));
+        require(IERC20(TOD).mint(msg.sender, reward));
 
         emit Unstake(msg.sender, stakes[msg.sender].tokenValue + reward);
         stakes[msg.sender].tokenValue = 0;
