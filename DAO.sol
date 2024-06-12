@@ -48,7 +48,7 @@ contract DAO {
     function addDeposit(uint256 _amount) external {
         require(TOD != address(0), "DAO: TOD is not defined");
         require(_amount > 0, "DAO: _amount must be over 0");
-        require(ERC20.ERC20(TOD).transferFrom(msg.sender, address(this), _amount), "DAO: not enough tokens");
+        require(ERC20.ERC20(TOD).transferFrom(msg.sender, address(this), _amount));
         deposits[msg.sender].allTokens += _amount;
     } 
 
@@ -120,8 +120,8 @@ contract DAO {
         require(_pId < allProposals.length, "DAO: proposal does not exist");
         Proposal memory proposal = allProposals[_pId];
         require(_tokens <= deposit.allTokens, "DAO: not enough tokens");
-        require(!voters[_pId][msg.sender], "DAO: you have already voted");
         require(block.timestamp < proposal.pEndTime, "DAO: proposal time is over");
+        require(!voters[_pId][msg.sender], "DAO: you have already voted");
 
         voters[_pId][msg.sender] = true;
 
