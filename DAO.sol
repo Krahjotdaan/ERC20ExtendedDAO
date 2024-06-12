@@ -96,7 +96,7 @@ contract DAO {
     ///
     function withdrawDeposit(uint256 _amount) external {
         require(_amount > 0, "DAO: _amount must be over 0");
-        Deposit storage deposit = deposits[msg.sender];
+        Deposit memory deposit = deposits[msg.sender];
         require(deposit.allTokens - deposit.frozenToken >= _amount, "DAO: not enough tokens");
 
         if (deposit.frozenToken > 0 && deposit.unfrozenTime < block.timestamp) {
