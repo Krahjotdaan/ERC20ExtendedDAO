@@ -35,6 +35,7 @@ contract DAO {
     event FinishProposal(bool quorum, bool result, bool success);
 
     constructor(uint256 _time) {
+        require(_time >= 60, "DAO: _time must be over or equals 1 minute"); 
         time = _time;
         chairman = msg.sender;
     }
