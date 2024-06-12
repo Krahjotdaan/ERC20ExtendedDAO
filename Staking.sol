@@ -32,8 +32,8 @@ contract Staking {
     address TOD;
     address public dao;
     address public creator;
-    uint256 rewardPercent;
-    uint256 rewardPeriod;
+    uint256 public rewardPercent = 0;
+    uint256 public rewardPeriod = 0;
     mapping(address => StakeStruct) public stakes;
 
     event Stake(address from, uint256 value, uint256 unstakeTime);
@@ -52,6 +52,7 @@ contract Staking {
         require(stakes[msg.sender].tokenValue == 0, "Staking: you already have a stake");
         require(unstakeTime > block.timestamp, "Staking: that time has passed");
         require(IERC20(token).allowance(msg.sender, address(this)) >= value, "Staking: not enough approved tokens to staking. Call function 'approve' to grant permission to staking to dispose of tokens");
+        require(rewardPercent != 0 && rewardPeriod != 0, "Staking: dao has not setted rewardPercent and/or rewardPeriod");
 
         IERC20(token).transferFrom(msg.sender, address(this), value);
         stakes[msg.sender] = StakeStruct(value, block.timestamp, unstakeTime, rewardPeriod, rewardPercent);
@@ -73,11 +74,13 @@ contract Staking {
 
     function setRewardPercent(uint256 percent) external {
         require(msg.sender == dao, "Staking: sender is not dao");
+        require(percent > 0, "Staking: new percent must be over 0");
         rewardPercent = percent;
     }
 
     function setRewardPeriod(uint256 time) external {
         require(msg.sender == dao, "Staking: sender is not dao");
+        require(time > 0, "Staking: new time must be over 0");
         rewardPeriod = time;
     }
 
