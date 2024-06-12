@@ -61,6 +61,7 @@ contract DAO {
 
     /// @notice contains confirmation of the fact of voting in all proposals for each DAO member
     mapping(uint256 => mapping(address => bool)) voters;
+    
     /// @notice contains structs Deposit for each DAO member
     mapping(address => Deposit) deposits;
 
