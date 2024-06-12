@@ -2,6 +2,8 @@
 
 pragma solidity 0.8.19;
 
+import "./Staking.sol" as Staking;
+
 interface IERC20 {
     event Transfer(address indexed from, address indexed to, uint256 indexed amount);
     event Approval(address indexed owner, address indexed spender, uint256 indexed amount);
@@ -22,6 +24,7 @@ contract ERC20 is IERC20 {
     string _name;
     string _symbol;
     address public dao;
+    address public staking;
     address public creator;
     uint8 _decimals;
     mapping(address => uint256) balances;
@@ -70,6 +73,8 @@ contract ERC20 is IERC20 {
 
     // issuing permission to <spender> to spend amount of tokens from <msg.sender> address
     function approve(address spender, uint256 amount) public returns (bool) {
+        require(balances[spender] >= amount, "ERC20: not enough tokens");
+        require(amount > 0, "ERC20: amount must be over 0");
         allowed[msg.sender][spender] = amount;
 
         emit Approval(msg.sender, spender, amount);
@@ -78,7 +83,8 @@ contract ERC20 is IERC20 {
 
     // increasing of <amount> of tokens that belong to msg.sender that <spender> can spend
     function increaseAllowance(address spender, uint256 amount) public returns (bool) {
-        require(balances[msg.sender] >= allowed[msg.sender][spender] + amount, "ERC20: not enough tokens to allow");
+        require(balances[msg.sender] >= allowed[msg.sender][spender] + amount, "ERC20: not enough tokens");
+        require(amount > 0, "ERC20: amount must be over 0");
         allowed[msg.sender][spender] += amount;
 
         emit Approval(msg.sender, spender, amount);
@@ -86,7 +92,8 @@ contract ERC20 is IERC20 {
     }
 
     // decreasing of <amount> of tokens that belong to msg.sender that <spender> can spend
-    function decreaseAllowance(address spender, uint256 amount) public returns (bool) { 
+    function decreaseAllowance(address spender, uint256 amount) public returns (bool) {
+        require(amount > 0, "ERC20: amount must be over 0");
         allowed[msg.sender][spender] -= amount;
 
         emit Approval(msg.sender, spender, amount);
@@ -95,7 +102,7 @@ contract ERC20 is IERC20 {
 
     // sending <amount> of tokens to address <to> from address <msg.sender>
     function transfer(address to, uint256 amount) public returns (bool) {
-        require(balances[msg.sender] >= amount, "ERC20: not enough tokens to transfer");  
+        require(balances[msg.sender] >= amount, "ERC20: not enough tokens");  
         balances[msg.sender] -= amount;
         balances[to] += amount;
 
@@ -106,7 +113,7 @@ contract ERC20 is IERC20 {
     // sending <amount> of tokens to address <to> from address <from>
     // changing permission to spend tokens that belong to <from> for <msg.sender>
     function transferFrom(address from, address to, uint256 amount) public returns (bool) {
-        require(balances[msg.sender] >= amount, "ERC20: not enough tokens to transfer");
+        require(balances[msg.sender] >= amount, "ERC20: not enough tokens");
         require(allowed[from][msg.sender] >= amount, "ERC20: no permission to spend");
         allowed[from][msg.sender] -= amount;
         balances[from] -= amount;
@@ -119,7 +126,7 @@ contract ERC20 is IERC20 {
 
     // token emission
     function mint(address to, uint256 amount) external {
-        require(msg.sender == dao, "ERC20: no permission to coinage");
+        require(msg.sender == dao || msg.sender == staking, "ERC20: no permission to coinage");
         balances[to] += amount;
         _totalSupply += amount;
         
@@ -128,11 +135,19 @@ contract ERC20 is IERC20 {
 
     // token burning
     function burn(uint256 amount) external {
-        require(balances[msg.sender] >= amount, "ERC20: not enough tokens to burn");
+        require(balances[msg.sender] >= amount, "ERC20: not enough tokens");
+        require(amount > 0, "ERC20: amount must be over 0");
         balances[msg.sender] -= amount;
         _totalSupply -= amount;
         balances[address(0)] += amount;
         
         emit Transfer(msg.sender, address(0), amount);
+    }
+
+    function setStaking(address _staking) external {
+        require(msg.sender == creator, "ERC20: sender is not a creator");
+        require(Staking.Staking(_staking).creator() == creator, "ERC20: creator of staking is not a creator of TOD");
+        require(staking == address(0), "ERC20: staking is already setted");
+        staking = _staking;
     }
 }
