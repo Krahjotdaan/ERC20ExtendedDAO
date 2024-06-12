@@ -113,7 +113,7 @@ contract ERC20 is IERC20 {
     // sending <amount> of tokens to address <to> from address <from>
     // changing permission to spend tokens that belong to <from> for <msg.sender>
     function transferFrom(address from, address to, uint256 amount) public returns (bool) {
-        require(balances[msg.sender] >= amount, "ERC20: not enough tokens");
+        require(balances[from] >= amount, "ERC20: not enough tokens");
         require(allowed[from][msg.sender] >= amount, "ERC20: no permission to spend");
         allowed[from][msg.sender] -= amount;
         balances[from] -= amount;
