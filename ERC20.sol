@@ -135,7 +135,7 @@ contract ERC20 is IERC20 {
     }
 
     // token burning
-    function burn(uint256 amount) external returns(bool) {
+    function burn(uint256 amount) external returns (bool) {
         require(balances[msg.sender] >= amount, "ERC20: not enough tokens");
         require(amount > 0, "ERC20: amount must be over 0");
         balances[msg.sender] -= amount;
