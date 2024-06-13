@@ -109,6 +109,10 @@ contract DAO {
         require(deposit.allTokens - deposit.frozenToken >= _amount, "DAO: not enough unfrozen tokens");
         require(ERC20.ERC20(TOD).transfer((msg.sender), _amount));
         deposit.allTokens -= _amount;
+
+        if (deposit.allTokens == 0) {
+            delete deposits[msg.sender];
+        }
     }
 
     /// @notice function of new proposal addition
