@@ -43,7 +43,7 @@ contract DAO {
     }
 
     /// @notice time allotted for proposal
-    uint256 time;
+    uint256 public time;
 
     /// @notice creator of DAO
     address public chairman;
@@ -69,7 +69,7 @@ contract DAO {
     event FinishProposal(bool quorum, bool result, bool success);
 
     constructor(uint256 _time) {
-        require(_time >= 60, "DAO: _time must be over or equals 1 minute"); 
+        require(_time >= 40, "DAO: _time must be over or equals 1 minute"); 
 
         time = _time;
         chairman = msg.sender;
@@ -100,13 +100,13 @@ contract DAO {
     function withdrawDeposit(uint256 _amount) external {
         require(_amount > 0, "DAO: _amount must be over 0");
         Deposit storage deposit = deposits[msg.sender];
-        require(deposit.allTokens - deposit.frozenToken >= _amount, "DAO: not enough tokens");
-
+        
         if (deposit.frozenToken > 0 && deposit.unfrozenTime < block.timestamp) {
             deposit.frozenToken = 0;
             deposit.unfrozenTime = 0;
         }
 
+        require(deposit.allTokens - deposit.frozenToken >= _amount, "DAO: not enough unfrozen tokens");
         require(ERC20.ERC20(TOD).transfer((msg.sender), _amount));
         deposit.allTokens -= _amount;
     }
@@ -123,8 +123,7 @@ contract DAO {
     function addProposal(bytes calldata _pCallData, address _pCallAddress) external {
         require(TOD != address(0), "DAO: TOD is not defined");
         require(_pCallAddress != address(0), "DAO: _pCallAddress is address(0)");
-        require(_pCallAddress != address(this), "DAO: _pCallAddress is DAO");
-        require(_pCallAddress == address(TOD) || _pCallAddress == address(staking), "DAO: _pCallAddress is not address of TOD or staking");
+        require(_pCallAddress == address(TOD) || _pCallAddress == address(staking) || _pCallAddress == address(this), "DAO: _pCallAddress is not address of TOD, staking or DAO");
         require(msg.sender == chairman, "DAO: you are not a chairman");
 
         allProposals.push(
@@ -267,5 +266,19 @@ contract DAO {
         require(Staking.Staking(_staking).creator() == chairman, "DAO: chairman is not a creator of _staking");
 
         staking = _staking;
+    }
+
+    /// @notice function of changing of proposal time
+    ///
+    /// @param newTime - new proposal time
+    ///
+    /// @dev causes interrupt if sender is not DAO
+    /// @dev causes interrupt if newTime < 60
+    ///
+    function changeProposalTime(uint256 newTime) public {
+        require(msg.sender == address(this), "DAO: sender is not DAO");
+        require(newTime >= 60, "DAO: newTime must be over or equals 1 minute");
+
+        time = newTime;
     }
 }
