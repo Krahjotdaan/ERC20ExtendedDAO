@@ -1,24 +1,21 @@
-from keys import *
-
-
-def event_tracking_setup():
-    global PRINT_EVENT
-    print("1. Выводить сообщения о новых событиях")
-    print("2. НЕ выводить сообщения о новых событиях")
-    choice = int(input("\nВведите номер пункта меню, который выбрали: "))
-    if choice == 1:
-        PRINT_EVENT = True
-    elif choice == 2:
-        PRINT_EVENT = False
-    menu()
-
-
-def menu():
-    pass
+from events_trackers import thread_dao_add_proposal, \
+                            thread_dao_finish_proposal, \
+                            thread_erc20_approval, \
+                            thread_erc20_transfer, \
+                            thread_staking_stake, \
+                            thread_staking_unstake
+from menu import event_tracking_setup
 
 
 def main():
-    pass
+    thread_dao_add_proposal.start()
+    thread_dao_finish_proposal.start()
+    thread_erc20_approval.start()
+    thread_erc20_transfer.start()
+    thread_staking_stake.start()
+    thread_staking_unstake.start()
+
+    event_tracking_setup()
 
 
 if __name__ == "__main__":

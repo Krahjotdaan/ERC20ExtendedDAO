@@ -86,4 +86,4 @@ thread_dao_finish_proposal = Thread(target=dao_log_loop_finish_proposal, args=(e
 thread_erc20_transfer = Thread(target=erc20_log_loop_transfer, args=(event_filter_erc20_transfer, 10))
 thread_erc20_approval = Thread(target=erc20_log_loop_approval, args=(event_filter_erc20_approval, 10))
 thread_staking_stake = Thread(target=staking_log_loop_stake, args=(event_filter_staking_stake, 10))
-thread_dao_staking_unstake = Thread(target=staking_log_loop_unstake, args=(event_filter_staking_unstake, 10))
+thread_staking_unstake = Thread(target=staking_log_loop_unstake, args=(event_filter_staking_unstake, 10))
