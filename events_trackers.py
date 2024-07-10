@@ -1,5 +1,6 @@
 import time
-from keys import PRINT_EVENT
+from threading import Thread
+from keys import PRINT_EVENT, DAO, ERC20, STAKING
 
 
 def dao_log_loop_add_proposal(event_filter, poll_interval):
@@ -71,4 +72,18 @@ def staking_log_loop_unstake(event_filter, poll_interval):
             print(f"to: {event['args']['to']}")
             print(f"value: {event['args']['value']}")
         time.sleep(poll_interval)
-        
+
+
+event_filter_dao_add_proposal = DAO.events.AddProposal.create_filter(fromBlock="latest")
+event_filter_dao_finish_proposal = DAO.events.FinishProposal.create_filter(fromBlock="latest")
+event_filter_erc20_transfer = ERC20.events.Transfer.create_filter(fromBlock="latest")
+event_filter_erc20_approval = ERC20.events.Approval.create_filter(fromBlock="latest")
+event_filter_staking_stake = STAKING.events.Stake.create_filter(fromBlock="latest")
+event_filter_staking_unstake = STAKING.events.Unstake.create_filter(fromBlock="latest")
+
+thread_dao_add_proposal = Thread(target=dao_log_loop_add_proposal, args=(event_filter_dao_add_proposal, 10))
+thread_dao_finish_proposal = Thread(target=dao_log_loop_finish_proposal, args=(event_filter_dao_finish_proposal, 10))
+thread_erc20_transfer = Thread(target=erc20_log_loop_transfer, args=(event_filter_erc20_transfer, 10))
+thread_erc20_approval = Thread(target=erc20_log_loop_approval, args=(event_filter_erc20_approval, 10))
+thread_staking_stake = Thread(target=staking_log_loop_stake, args=(event_filter_staking_stake, 10))
+thread_dao_staking_unstake = Thread(target=staking_log_loop_unstake, args=(event_filter_staking_unstake, 10))
