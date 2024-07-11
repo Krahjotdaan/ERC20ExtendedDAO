@@ -74,6 +74,7 @@ def staking_log_loop_unstake(event_filter, poll_interval):
         time.sleep(poll_interval)
 
 
+# создание фильтров для отслеживания событий
 event_filter_dao_add_proposal = DAO.events.AddProposal.create_filter(fromBlock="latest")
 event_filter_dao_finish_proposal = DAO.events.FinishProposal.create_filter(fromBlock="latest")
 event_filter_erc20_transfer = ERC20.events.Transfer.create_filter(fromBlock="latest")
@@ -81,6 +82,7 @@ event_filter_erc20_approval = ERC20.events.Approval.create_filter(fromBlock="lat
 event_filter_staking_stake = STAKING.events.Stake.create_filter(fromBlock="latest")
 event_filter_staking_unstake = STAKING.events.Unstake.create_filter(fromBlock="latest")
 
+# создание потоков
 thread_dao_add_proposal = Thread(target=dao_log_loop_add_proposal, args=(event_filter_dao_add_proposal, 10))
 thread_dao_finish_proposal = Thread(target=dao_log_loop_finish_proposal, args=(event_filter_dao_finish_proposal, 10))
 thread_erc20_transfer = Thread(target=erc20_log_loop_transfer, args=(event_filter_erc20_transfer, 10))
