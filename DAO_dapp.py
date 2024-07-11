@@ -8,6 +8,7 @@ from menu import event_tracking_setup
 
 
 def main():
+    # запуск потоков
     thread_dao_add_proposal.start()
     thread_dao_finish_proposal.start()
     thread_erc20_approval.start()
