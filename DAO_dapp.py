@@ -15,6 +15,8 @@ def main():
     thread_staking_stake.start()
     thread_staking_unstake.start()
 
+    print("\nПриложение работает в тестовой сети Sepolia. Чтобы посмотреть подробную информацию о транзакциях, перейдите на https://sepolia.etherscan.io/")
+
     event_tracking_setup()
 
 
