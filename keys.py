@@ -3,6 +3,7 @@ from web3 import Web3, HTTPProvider
 
 provider = ""
 WALLET_ADDRESS = ""
+PRIVATE_KEY = ""
 dao = "0xDe7F0d5e288F4CBba1720B926a35048dbEF3c76E"
 erc20 = "0x1AC594Ae7bc3A413Fc775E263d03813269677cd7"
 staking = "0x17497b0529148F2e821649555d7cef0db9D348a2"
