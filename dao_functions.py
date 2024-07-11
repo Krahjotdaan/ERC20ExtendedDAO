@@ -1,4 +1,4 @@
-from keys import WALLET_ADDRESS, DAO, w3
+from keys import WALLET_ADDRESS, DAO, w3, PRIVATE_KEY
 
 
 def dao_call_time():
@@ -27,7 +27,7 @@ def dao_get_deposit():
 
 
 def dao_get_all_proposals():
-    proposals = DAO.functions.getAllProposals().call()
+    proposals = DAO.functions.getAllProposal().call()
     i = 1
     for pr in proposals:
         print(f"{i}. {pr}")
@@ -46,9 +46,12 @@ def dao_add_deposit():
         'from': WALLET_ADDRESS,
         'chainId': 11155111,
         'gas': 300000,
-        'maxFeePerGas': w3.eth.get_transaction_count(WALLET_ADDRESS)
+        'maxFeePerGas': w3.eth.gas_price + 300000,
+        'nonce': w3.eth.get_transaction_count(WALLET_ADDRESS)
     })
-    w3.eth.send_transaction(transaction)
+    signed_transaction = w3.eth.account.sign_transaction(transaction, PRIVATE_KEY)
+    tx_hash = w3.eth.send_raw_transaction(signed_transaction.rawTransaction)
+    print(f"transaction hash: {w3.to_hex(tx_hash)}")
 
 
 def dao_withdraw_deposit():
@@ -57,9 +60,12 @@ def dao_withdraw_deposit():
         'from': WALLET_ADDRESS,
         'chainId': 11155111,
         'gas': 300000,
-        'maxFeePerGas': w3.eth.get_transaction_count(WALLET_ADDRESS)
+        'maxFeePerGas': w3.eth.gas_price + 300000,
+        'nonce': w3.eth.get_transaction_count(WALLET_ADDRESS)
     })
-    w3.eth.send_transaction(transaction)
+    signed_transaction = w3.eth.account.sign_transaction(transaction, PRIVATE_KEY)
+    tx_hash = w3.eth.send_raw_transaction(signed_transaction.rawTransaction)
+    print(f"transaction hash: {w3.to_hex(tx_hash)}")
 
 
 def dao_add_proposal():
@@ -69,9 +75,12 @@ def dao_add_proposal():
         'from': WALLET_ADDRESS,
         'chainId': 11155111,
         'gas': 300000,
-        'maxFeePerGas': w3.eth.get_transaction_count(WALLET_ADDRESS)
+        'maxFeePerGas': w3.eth.gas_price + 300000,
+        'nonce': w3.eth.get_transaction_count(WALLET_ADDRESS)
     })
-    w3.eth.send_transaction(transaction)
+    signed_transaction = w3.eth.account.sign_transaction(transaction, PRIVATE_KEY)
+    tx_hash = w3.eth.send_raw_transaction(signed_transaction.rawTransaction)
+    print(f"transaction hash: {w3.to_hex(tx_hash)}")
 
 
 def dao_vote():
@@ -84,9 +93,12 @@ def dao_vote():
         'from': WALLET_ADDRESS,
         'chainId': 11155111,
         'gas': 300000,
-        'maxFeePerGas': w3.eth.get_transaction_count(WALLET_ADDRESS)
+        'maxFeePerGas': w3.eth.gas_price + 300000,
+        'nonce': w3.eth.get_transaction_count(WALLET_ADDRESS)
     })
-    w3.eth.send_transaction(transaction)
+    signed_transaction = w3.eth.account.sign_transaction(transaction, PRIVATE_KEY)
+    tx_hash = w3.eth.send_raw_transaction(signed_transaction.rawTransaction)
+    print(f"transaction hash: {w3.to_hex(tx_hash)}")
 
 
 def dao_finish_proposal():
@@ -95,7 +107,10 @@ def dao_finish_proposal():
         'from': WALLET_ADDRESS,
         'chainId': 11155111,
         'gas': 300000,
-        'maxFeePerGas': w3.eth.get_transaction_count(WALLET_ADDRESS)
+        'maxFeePerGas': w3.eth.gas_price + 300000,
+        'nonce': w3.eth.get_transaction_count(WALLET_ADDRESS)
     })
-    w3.eth.send_transaction(transaction)
+    signed_transaction = w3.eth.account.sign_transaction(transaction, PRIVATE_KEY)
+    tx_hash = w3.eth.send_raw_transaction(signed_transaction.rawTransaction)
+    print(f"transaction hash: {w3.to_hex(tx_hash)}")
     

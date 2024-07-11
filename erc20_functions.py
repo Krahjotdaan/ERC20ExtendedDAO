@@ -1,4 +1,4 @@
-from keys import WALLET_ADDRESS, ERC20, w3
+from keys import WALLET_ADDRESS, ERC20, w3, PRIVATE_KEY
 
 
 def erc20_dao():
@@ -51,9 +51,12 @@ def erc20_approve():
         'from': WALLET_ADDRESS,
         'chainId': 11155111,
         'gas': 300000,
-        'maxFeePerGas': w3.eth.get_transaction_count(WALLET_ADDRESS)
+        'maxFeePerGas': w3.eth.gas_price + 300000,
+        'nonce': w3.eth.get_transaction_count(WALLET_ADDRESS)
     })
-    w3.eth.send_transaction(transaction)
+    signed_transaction = w3.eth.account.sign_transaction(transaction, PRIVATE_KEY)
+    tx_hash = w3.eth.send_raw_transaction(signed_transaction.rawTransaction)
+    print(f"transaction hash: {w3.to_hex(tx_hash)}")
 
 
 
@@ -64,9 +67,12 @@ def erc20_increase_allowance():
         'from': WALLET_ADDRESS,
         'chainId': 11155111,
         'gas': 300000,
-        'maxFeePerGas': w3.eth.get_transaction_count(WALLET_ADDRESS)
+        'maxFeePerGas': w3.eth.gas_price + 300000,
+        'nonce': w3.eth.get_transaction_count(WALLET_ADDRESS)
     })
-    w3.eth.send_transaction(transaction)
+    signed_transaction = w3.eth.account.sign_transaction(transaction, PRIVATE_KEY)
+    tx_hash = w3.eth.send_raw_transaction(signed_transaction.rawTransaction)
+    print(f"transaction hash: {w3.to_hex(tx_hash)}")
 
 
 def erc20_decrease_allowance():
@@ -76,9 +82,12 @@ def erc20_decrease_allowance():
         'from': WALLET_ADDRESS,
         'chainId': 11155111,
         'gas': 300000,
-        'maxFeePerGas': w3.eth.get_transaction_count(WALLET_ADDRESS)
+        'maxFeePerGas': w3.eth.gas_price + 300000,
+        'nonce': w3.eth.get_transaction_count(WALLET_ADDRESS)
     })
-    w3.eth.send_transaction(transaction)
+    signed_transaction = w3.eth.account.sign_transaction(transaction, PRIVATE_KEY)
+    tx_hash = w3.eth.send_raw_transaction(signed_transaction.rawTransaction)
+    print(f"transaction hash: {w3.to_hex(tx_hash)}")
 
 
 def erc20_transfer():
@@ -88,9 +97,12 @@ def erc20_transfer():
         'from': WALLET_ADDRESS,
         'chainId': 11155111,
         'gas': 300000,
-        'maxFeePerGas': w3.eth.get_transaction_count(WALLET_ADDRESS)
+        'maxFeePerGas': w3.eth.gas_price + 300000,
+        'nonce': w3.eth.get_transaction_count(WALLET_ADDRESS)
     })
-    w3.eth.send_transaction(transaction)
+    signed_transaction = w3.eth.account.sign_transaction(transaction, PRIVATE_KEY)
+    tx_hash = w3.eth.send_raw_transaction(signed_transaction.rawTransaction)
+    print(f"transaction hash: {w3.to_hex(tx_hash)}")
 
 
 def erc20_transfer_from():
@@ -101,9 +113,12 @@ def erc20_transfer_from():
         'from': WALLET_ADDRESS,
         'chainId': 11155111,
         'gas': 300000,
-        'maxFeePerGas': w3.eth.get_transaction_count(WALLET_ADDRESS)
+        'maxFeePerGas': w3.eth.gas_price + 300000,
+        'nonce': w3.eth.get_transaction_count(WALLET_ADDRESS)
     })
-    w3.eth.send_transaction(transaction)
+    signed_transaction = w3.eth.account.sign_transaction(transaction, PRIVATE_KEY)
+    tx_hash = w3.eth.send_raw_transaction(signed_transaction.rawTransaction)
+    print(f"transaction hash: {w3.to_hex(tx_hash)}")
 
 
 def erc20_burn():
@@ -112,6 +127,9 @@ def erc20_burn():
         'from': WALLET_ADDRESS,
         'chainId': 11155111,
         'gas': 300000,
-        'maxFeePerGas': w3.eth.get_transaction_count(WALLET_ADDRESS)
+        'maxFeePerGas': w3.eth.gas_price + 300000,
+        'nonce': w3.eth.get_transaction_count(WALLET_ADDRESS)
     })
-    w3.eth.send_transaction(transaction)
+    signed_transaction = w3.eth.account.sign_transaction(transaction, PRIVATE_KEY)
+    tx_hash = w3.eth.send_raw_transaction(signed_transaction.rawTransaction)
+    print(f"transaction hash: {w3.to_hex(tx_hash)}")

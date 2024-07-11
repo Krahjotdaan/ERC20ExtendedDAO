@@ -1,4 +1,4 @@
-from keys import WALLET_ADDRESS, STAKING, w3
+from keys import WALLET_ADDRESS, STAKING, w3, PRIVATE_KEY
 
 
 def staking_tod():
@@ -29,9 +29,12 @@ def staking_make_stake():
         'from': WALLET_ADDRESS,
         'chainId': 11155111,
         'gas': 300000,
-        'maxFeePerGas': w3.eth.get_transaction_count(WALLET_ADDRESS)
+        'maxFeePerGas': w3.eth.gas_price + 300000,
+        'nonce': w3.eth.get_transaction_count(WALLET_ADDRESS)
     })
-    w3.eth.send_transaction(transaction)
+    signed_transaction = w3.eth.account.sign_transaction(transaction, PRIVATE_KEY)
+    tx_hash = w3.eth.send_raw_transaction(signed_transaction.rawTransaction)
+    print(f"transaction hash: {w3.to_hex(tx_hash)}")
 
 
 def staking_unstake():
@@ -39,6 +42,9 @@ def staking_unstake():
         'from': WALLET_ADDRESS,
         'chainId': 11155111,
         'gas': 300000,
-        'maxFeePerGas': w3.eth.get_transaction_count(WALLET_ADDRESS)
+        'maxFeePerGas': w3.eth.gas_price + 300000,
+        'nonce': w3.eth.get_transaction_count(WALLET_ADDRESS)
     })
-    w3.eth.send_transaction(transaction)
+    signed_transaction = w3.eth.account.sign_transaction(transaction, PRIVATE_KEY)
+    tx_hash = w3.eth.send_raw_transaction(signed_transaction.rawTransaction)
+    print(f"transaction hash: {w3.to_hex(tx_hash)}")
