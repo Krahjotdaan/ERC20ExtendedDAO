@@ -10,7 +10,7 @@ def dao_log_loop_add_proposal(event_filter, poll_interval):
         for event in event_filter.get_new_entries():
             print("\nNew proposal")
             print(f"proposal id: {event['args']['pId']}")
-            print(f"proposal call data: {event['args']['pCallData']}")
+            print(f"proposal call data: {event['args']['pCallData'].hex()}")
             print(f"proposal call address: {event['args']['pCallAddress']}")
         time.sleep(poll_interval)
 
@@ -20,7 +20,7 @@ def dao_log_loop_finish_proposal(event_filter, poll_interval):
         while not PRINT_EVENT:
             time.sleep(poll_interval)
         for event in event_filter.get_new_entries():
-            print("\nProposal is finished")
+            print(f"\nProposal is finished")
             print(f"quorum: {event['args']['quorum']}")
             print(f"result: {event['args']['result']}")
             print(f"success: {event['args']['success']}")

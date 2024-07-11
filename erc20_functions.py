@@ -46,7 +46,12 @@ def erc20_allowance():
 
 def erc20_approve():
     spender = input("Введите адрес нового оператора: ")
-    amount = int(input("Введите количество токенов для разрешения оператору: "))
+
+    try:
+        amount = int(input("Введите количество токенов для разрешения оператору: "))
+    except ValueError:
+        amount = int(input("Введите количество токенов для разрешения оператору: "))
+
     transaction = ERC20.functions.approve(spender, amount).build_transaction({
         'from': WALLET_ADDRESS,
         'chainId': 11155111,
@@ -61,7 +66,12 @@ def erc20_approve():
 
 def erc20_increase_allowance():
     spender = input("Введите адрес одобренного оператора: ")
-    amount = int(input("Введите количество токенов для увеличения разрешения оператору(количество разрешенных токенов увеличится на эту величину): "))
+
+    try:
+        amount = int(input("Введите количество токенов для увеличения разрешения оператору(количество разрешенных токенов увеличится на эту величину): "))
+    except:
+        amount = int(input("Введите количество токенов для увеличения разрешения оператору(количество разрешенных токенов увеличится на эту величину): "))
+
     transaction = ERC20.functions.increaseAllowance(spender, amount).build_transaction({
         'from': WALLET_ADDRESS,
         'chainId': 11155111,
@@ -76,7 +86,12 @@ def erc20_increase_allowance():
 
 def erc20_decrease_allowance():
     spender = input("Введите адрес одобренного оператора: ")
-    amount = int(input("Введите количество токенов для уменьшения разрешения оператору(количество разрешенных токенов уменьшится на эту величину): "))
+
+    try:
+        amount = int(input("Введите количество токенов для уменьшения разрешения оператору(количество разрешенных токенов уменьшится на эту величину): "))
+    except ValueError:
+        amount = int(input("Введите количество токенов для уменьшения разрешения оператору(количество разрешенных токенов уменьшится на эту величину): "))
+
     transaction = ERC20.functions.decreaseAllowance(spender, amount).build_transaction({
         'from': WALLET_ADDRESS,
         'chainId': 11155111,
@@ -91,7 +106,11 @@ def erc20_decrease_allowance():
 
 def erc20_transfer():
     to = input("Введите адрес получателя: ")
-    amount = int(input("Введите количество токенов для отправки: "))
+    try:
+        amount = int(input("Введите количество токенов для отправки: "))
+    except ValueError:
+        amount = int(input("Введите количество токенов для отправки: "))
+
     transaction = ERC20.functions.transfer(to, amount).build_transaction({
         'from': WALLET_ADDRESS,
         'chainId': 11155111,
@@ -107,7 +126,12 @@ def erc20_transfer():
 def erc20_transfer_from():
     frm = input("Введите адрес, с которого отправятся токены: ")
     to = input("Введите адрес получателя: ")
-    amount = int(input("Введите количество токенов для отправки: "))
+
+    try:
+        amount = int(input("Введите количество токенов для отправки: "))
+    except ValueError:
+        amount = int(input("Введите количество токенов для отправки: "))
+
     transaction = ERC20.functions.transferFrom(frm, to, amount).build_transaction({
         'from': WALLET_ADDRESS,
         'chainId': 11155111,
@@ -121,7 +145,11 @@ def erc20_transfer_from():
 
 
 def erc20_burn():
-    amount = int(input("Введите количество токенов для уничтожения: "))
+    try:
+        amount = int(input("Введите количество токенов для уничтожения: "))
+    except ValueError:
+        amount = int(input("Введите количество токенов для уничтожения: "))
+        
     transaction = ERC20.functions.burn(amount).build_transaction({
         'from': WALLET_ADDRESS,
         'chainId': 11155111,

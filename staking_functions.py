@@ -23,8 +23,17 @@ def staking_reward_period():
 
 def staking_make_stake():
     token = STAKING.functions.TOD().call()
-    amount = int(input("Введите количество токенов для внесения в стейк (токены нельзя будет вывести до окончания периода стейка): "))
-    period = int(input("Введите количество секунд, на которое будут заморожены токены: "))
+
+    try:
+        amount = int(input("Введите количество токенов для внесения в стейк (токены нельзя будет вывести до окончания периода стейка): "))
+    except ValueError:
+        amount = int(input("Введите количество токенов для внесения в стейк (токены нельзя будет вывести до окончания периода стейка): "))
+
+    try:       
+        period = int(input("Введите количество секунд, на которое будут заморожены токены: "))
+    except ValueError:
+        period = int(input("Введите количество секунд, на которое будут заморожены токены: "))
+
     transaction = STAKING.functions.makeStake(token, amount, period).build_transaction({
         'from': WALLET_ADDRESS,
         'chainId': 11155111,

@@ -39,23 +39,31 @@ def dao_get_all_proposals():
         print(f"tokens 'no': {pr[2]}")
         print(f"call address: {pr[3]}")
         print(f"status: {pr[4]}")
-        print(f"call data: {pr[5]}\n")
+        print(f"call data: {pr[5].hex()}\n")
         i += 1
 
 
 def dao_get_proposal_by_id():
-    n = int(input("Введите номер голосования: "))
+    try:
+        n = int(input("Введите номер голосования: "))
+    except ValueError:
+        n = int(input("Введите номер голосования: "))
+
     proposal = DAO.functions.getProposalById(n).call()
     print(f"end time: {proposal[0]}")
     print(f"tokens 'yes': {proposal[1]}")
     print(f"tokens 'no': {proposal[2]}")
     print(f"call address: {proposal[3]}")
     print(f"status: {proposal[4]}")
-    print(f"call data: {proposal[5]}")
+    print(f"call data: {proposal[5].hex()}")
 
 
 def dao_add_deposit():
-    amount = int(input("Укажите количество токенов, которое хотите внести: "))
+    try:
+        amount = int(input("Укажите количество токенов, которое хотите внести: "))
+    except ValueError:
+        amount = int(input("Укажите количество токенов, которое хотите внести: "))
+
     transaction = DAO.functions.addDeposit(amount).build_transaction({
         'from': WALLET_ADDRESS,
         'chainId': 11155111,
@@ -69,7 +77,11 @@ def dao_add_deposit():
 
 
 def dao_withdraw_deposit():
-    amount = int(input("Укажите количество токенов, которое хотите вывести: "))
+    try:
+        amount = int(input("Укажите количество токенов, которое хотите вывести: "))
+    except ValueError:
+        amount = int(input("Укажите количество токенов, которое хотите вывести: "))
+
     transaction = DAO.functions.withdrawDeposit(amount).build_transaction({
         'from': WALLET_ADDRESS,
         'chainId': 11155111,
@@ -98,12 +110,24 @@ def dao_add_proposal():
 
 
 def dao_vote():
-    id = int(input("Введите id голосования: "))
-    tokens = int(input("Введите количество токенов, которыми хотите проголосовать: "))
-    choice = int(input("Введите выбор (1 - за, 0 - против): "))
+    try:
+        id = int(input("Введите id голосования: "))
+    except:
+        id = int(input("Введите id голосования: "))
+
+    try:
+        tokens = int(input("Введите количество токенов, которыми хотите проголосовать: "))
+    except ValueError:
+        tokens = int(input("Введите количество токенов, которыми хотите проголосовать: "))
+    
+    try:
+        choice = int(input("Введите выбор (1 - за, 0 - против): "))
+    except ValueError:
+        choice = int(input("Введите выбор (1 - за, 0 - против): "))
     if choice != 1 and choice != 0:
         choice = int(input("Введите выбор (1 - за, 0 - против): "))
-    transaction = DAO.functions.vote(id, tokens, choice).build_transaction({
+
+    transaction = DAO.functions.vote(id, tokens, bool(choice)).build_transaction({
         'from': WALLET_ADDRESS,
         'chainId': 11155111,
         'gas': 300000,
@@ -116,7 +140,11 @@ def dao_vote():
 
 
 def dao_finish_proposal():
-    id = int(input("Введите id голосования для завершения: "))
+    try:
+        id = int(input("Введите id голосования: "))
+    except:
+        id = int(input("Введите id голосования: "))
+
     transaction = DAO.functions.finishProposal(id).build_transaction({
         'from': WALLET_ADDRESS,
         'chainId': 11155111,

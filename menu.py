@@ -7,11 +7,18 @@ def event_tracking_setup():
     global PRINT_EVENT
     print("1. Выводить сообщения о новых событиях")
     print("2. НЕ выводить сообщения о новых событиях")
-    choice = int(input("\nВведите номер пункта меню, который выбрали: "))
+
+    try:
+        choice = int(input("\nВведите номер пункта меню, который выбрали: "))
+    except ValueError:
+        choice = int(input("\nВведите номер пункта меню, который выбрали: "))
+
     if choice == 1:
         PRINT_EVENT = True
     elif choice == 2:
         PRINT_EVENT = False
+    else:
+        event_tracking_setup()
     menu()
 
 
@@ -23,7 +30,12 @@ def menu():
         print("3. Staking")
         print("4. Настроить отслеживание событий")
         print("5. Выйти из программы")
-        choice = int(input("\nВведите номер пункта меню, который выбрали: "))
+
+        try:
+            choice = int(input("\nВведите номер пункта меню, который выбрали: "))
+        except ValueError:
+            choice = int(input("\nВведите номер пункта меню, который выбрали: "))
+
         if choice == 1:
             dao_menu()
         elif choice == 2:
@@ -34,6 +46,8 @@ def menu():
             event_tracking_setup()
         elif choice == 5:
             exit()
+        else:
+            menu()
 
 
 def dao_menu():
@@ -52,7 +66,12 @@ def dao_menu():
         print("11. Вызвать функцию dao_vote")
         print("12. Вызвать функцию dao_finish_proposal")
         print("13. Вернуться в главное меню")
-        choice = int(input("\nВведите номер пункта меню, который выбрали: "))
+
+        try:
+            choice = int(input("\nВведите номер пункта меню, который выбрали: "))
+        except ValueError:
+            choice = int(input("\nВведите номер пункта меню, который выбрали: "))
+
         if choice == 1:
             dao_call_time()
         elif choice == 2:
@@ -79,6 +98,8 @@ def dao_menu():
             dao_finish_proposal()
         elif choice == 13:
             menu()
+        else:
+            dao_menu()
 
 
 def erc20_menu():
@@ -99,7 +120,12 @@ def erc20_menu():
         print("13. Вызвать функцию erc20_transfer_from")
         print("14. Вызвать функцию erc20_burn")
         print("15. Вернуться в главное меню")
-        choice = int(input("\nВведите номер пункта меню, который выбрали: "))
+
+        try:
+            choice = int(input("\nВведите номер пункта меню, который выбрали: "))
+        except ValueError:
+            choice = int(input("\nВведите номер пункта меню, который выбрали: "))
+            
         if choice == 1:
             erc20_dao()
         elif choice == 2:
@@ -130,6 +156,8 @@ def erc20_menu():
             erc20_burn()
         elif choice == 15:
             menu()
+        else:
+            erc20_menu()
 
 
 def staking_menu():
@@ -157,3 +185,5 @@ def staking_menu():
             staking_unstake()
         elif choice == 7:
             menu()
+        else:
+            staking_menu()
