@@ -23,21 +23,35 @@ def dao_call_staking():
 
 def dao_get_deposit():
     deposit = DAO.functions.getDeposit().call()
-    print(f"your deposit: {deposit}")
+    print(f"your deposit:")
+    print(f"all tokens: {deposit[0]}")
+    print(f"frozen tokens: {deposit[1]}")
+    print(f"unfrozen time: {deposit[2]}")
 
 
 def dao_get_all_proposals():
     proposals = DAO.functions.getAllProposal().call()
     i = 1
     for pr in proposals:
-        print(f"{i}. {pr}")
+        print(f"{i}.")
+        print(f"end time: {pr[0]}")
+        print(f"tokens 'yes': {pr[1]}")
+        print(f"tokens 'no': {pr[2]}")
+        print(f"call address: {pr[3]}")
+        print(f"status: {pr[4]}")
+        print(f"call data: {pr[5]}")
         i += 1
 
 
 def dao_get_proposal_by_id():
     n = int(input("Введите номер голосования: "))
     proposal = DAO.functions.getProposalById(n).call()
-    print(proposal)
+    print(f"end time: {proposal[0]}")
+    print(f"tokens 'yes': {proposal[1]}")
+    print(f"tokens 'no': {proposal[2]}")
+    print(f"call address: {proposal[3]}")
+    print(f"status: {proposal[4]}")
+    print(f"call data: {proposal[5]}")
 
 
 def dao_add_deposit():

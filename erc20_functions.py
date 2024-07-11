@@ -59,7 +59,6 @@ def erc20_approve():
     print(f"transaction hash: {w3.to_hex(tx_hash)}")
 
 
-
 def erc20_increase_allowance():
     spender = input("Введите адрес одобренного оператора: ")
     amount = int(input("Введите количество токенов для увеличения разрешения оператору(количество разрешенных токенов увеличится на эту величину): "))
