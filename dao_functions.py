@@ -39,7 +39,7 @@ def dao_get_all_proposals():
         print(f"tokens 'no': {pr[2]}")
         print(f"call address: {pr[3]}")
         print(f"status: {pr[4]}")
-        print(f"call data: {pr[5]}")
+        print(f"call data: {pr[5]}\n")
         i += 1
 
 
