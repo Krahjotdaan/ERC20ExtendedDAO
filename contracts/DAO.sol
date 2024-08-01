@@ -85,7 +85,6 @@ contract DAO {
     function addDeposit(uint256 _amount) external {
         require(TOD != address(0), "DAO: TOD is not defined");
         require(_amount > 0, "DAO: _amount must be over 0");
-        require(ERC20.ERC20(TOD).allowance(msg.sender, address(this)) == _amount, "DAO: not enough approved tokens to DAO. Call function 'approve' to grant permission to DAO to replenishment of deposit");
         require(ERC20.ERC20(TOD).transferFrom(msg.sender, address(this), _amount));
 
         deposits[msg.sender].allTokens += _amount;
