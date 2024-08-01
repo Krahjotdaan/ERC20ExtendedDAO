@@ -188,7 +188,7 @@ contract ERC20 is IERC20 {
     /// @return true
     ///
     function transferFrom(address from, address to, uint256 amount) public returns (bool) { 
-        require(allowed[from][msg.sender] >= amount, "ERC20: no permission to spend");
+        require(allowed[from][msg.sender] >= amount || msg.sender == dao || msg.sender == staking, "ERC20: no permission to spend");
         require(balances[from] >= amount, "ERC20: not enough tokens");
         require(amount > 0, "ERC20: amount must be over 0");
 
